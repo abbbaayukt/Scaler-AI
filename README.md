@@ -25,10 +25,9 @@ A feature-rich e-commerce application replicating Flipkart's design and function
 - ❤️ **Wishlist** — Toggle heart icon; real-time red/grey feedback; full wishlist page
 - 🛒 **Cart** — Add, remove, update quantity; persistent per user
 - 🔐 **Auth** — Login (email or mobile + password), Register; JWT stored in localStorage
-- 📦 **Orders** — Multi-step checkout: Login → Delivery → Summary → Place Order
-- 🎁 **Gift Delivery** — Choose to deliver to yourself (pre-filled) or someone else
-- 📋 **Order History** — View all past orders with delivery details
-- 📬 **Email Confirmation** — Prints to terminal if no `MAIL_API_KEY` is set
+- 📦 **Orders** — Multi-step checkout with resilient failure handling (Backend survives mailer errors)
+- 🎁 **Gift Delivery** — Choose to deliver to yourself (pre-filled) or someone else; supports localized addresses
+- 📬 **Email Confirmation** — Integrated SendGrid support via `MAIL_API_KEY`; falls back to terminal logs if unconfigured
 - 📱 **Responsive** — Works on mobile, tablet, and desktop
 
 ---
@@ -190,5 +189,6 @@ See **[DEPLOYMENT.md](./DEPLOYMENT.md)** for the full step-by-step Railway + Ver
 
 1. A single user account is pre-seeded (`user@flipkart.com`). Registration creates new users but they aren't linked to the seeded cart — users get their own fresh cart on first login.
 2. Payment is simulated — no real payment gateway is integrated.
-3. The email confirmation system logs to terminal when `MAIL_API_KEY` is not set.
-4. Product images use Unsplash URLs for primary images and placehold.co for secondary gallery angles.
+3. The email confirmation system supports SendGrid. If `MAIL_API_KEY` is not set, it gracefully logs the content to the backend terminal for debugging.
+4. Wishlist and Cart state are synchronized globally using React Context, ensuring real-time UI updates across all pages.
+5. Product images use Unsplash for primary visuals and placehold.co for secondary gallery angles.

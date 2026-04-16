@@ -5,29 +5,20 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Trash2 } from 'lucide-react'
 
 const Wishlist = () => {
-  const { API_URL, user } = useContext(StoreContext)
-  const [wishlist, setWishlist] = useState([])
+  const { wishlist, toggleWishlist, user } = useContext(StoreContext)
   const navigate = useNavigate()
-
-  const fetchWishlist = async () => {
-    try {
-      const res = await axios.get(`${API_URL}/wishlist/`)
-      setWishlist(res.data)
-    } catch (e) { console.error(e) }
-  }
 
   useEffect(() => {
     if (!user) {
       navigate('/login')
       return;
     }
-    fetchWishlist()
-  }, [API_URL, user, navigate])
+  }, [user, navigate])
 
   const remove = async (id) => {
-    await axios.delete(`${API_URL}/wishlist/${id}`)
-    fetchWishlist()
+    await toggleWishlist(id)
   }
+
 
   return (
     <div className="wishlist-container">

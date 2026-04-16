@@ -23,7 +23,13 @@ const Checkout = () => {
   const chooseSelf = () => {
     setDeliverTo('self')
     const nameFromEmail = user?.email?.split('@')[0] || ''
-    setDelivery({ name: nameFromEmail, phone: '', address: user?.address || '', pincode: user?.pincode || '' })
+    setDelivery({ 
+      name: nameFromEmail, 
+      phone: user?.phone || '', 
+      address: user?.address || '', 
+      pincode: user?.pincode || '',
+      locality: user?.locality || ''
+    })
   }
 
   const chooseOther = () => {
@@ -35,10 +41,14 @@ const Checkout = () => {
 
   const handlePlaceOrder = async () => {
     try {
+      const fullAddress = delivery.locality 
+        ? `${delivery.address}, ${delivery.locality}` 
+        : delivery.address;
+
       const res = await axios.post(`${API_URL}/orders/`, {
         customer_name: delivery.name,
         customer_phone: delivery.phone,
-        shipping_address: delivery.address,
+        shipping_address: fullAddress,
         pincode: delivery.pincode
       })
       setPlacedId(res.data.id)

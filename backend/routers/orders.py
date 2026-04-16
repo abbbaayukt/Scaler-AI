@@ -45,7 +45,11 @@ def place_order(order_req: schemas.OrderCreate, db: Session = Depends(get_db), c
     db.refresh(new_order)
     
     # Send confirmation email (or print to terminal)
-    send_order_confirmation(current_user.email, new_order.id, new_order.shipping_address)
+    try:
+        send_order_confirmation(current_user.email, new_order.id, new_order.shipping_address)
+    except Exception as e:
+        print(f"Mailer error: {e}")
+
     
     return new_order
 
